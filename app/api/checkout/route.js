@@ -44,6 +44,12 @@ export async function POST(request) {
       return NextResponse.json({ error: "Server configuration error" }, { status: 500 })
     }
 
+    // Determine the base URL for the callback
+    // Use VERCEL_URL for Vercel deployments, otherwise fallback to NEXT_PUBLIC_VERCEL_URL or localhost
+    const baseUrl = process.env.VERCEL_URL
+      ? `https://${process.env.VERCEL_URL}` // Vercel provides VERCEL_URL without http/https
+      : process.env.NEXT_PUBLIC_VERCEL_URL || "http://localhost:3000"
+
     // Initialize Paystack transaction
     const paystackResponse = await fetch("https://api.paystack.co/transaction/initialize", {
       method: "POST",
@@ -54,7 +60,7 @@ export async function POST(request) {
       body: JSON.stringify({
         email: customerEmail,
         amount: amountInKobo,
-        callback_url: `${process.env.NEXT_PUBLIC_VERCEL_URL || "http://localhost:3000"}/thank-you`, // Redirect after payment
+        callback_url: `${baseUrl}/thank-you`, // Redirect after payment
         metadata: {
           cartItems: cartItems.map((item) => ({
             id: item.id,
@@ -79,9 +85,6 @@ export async function POST(request) {
       console.error("Paystack initialization error:", paystackData)
       return NextResponse.json({ error: paystackData.message || "Failed to initialize payment" }, { status: 500 })
     }
-
-    // Optionally, save a pending order to Supabase here if needed for tracking
-    // For now, we'll save the order only after successful payment on /thank-you page
 
     return NextResponse.json({ authorization_url: paystackData.data.authorization_url })
   } catch (error) {
