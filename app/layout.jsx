@@ -1,5 +1,5 @@
 import "./globals.css"
-import { CartProvider } from "../context/CartContext"
+import { Providers } from "../components/providers" // Import the new Providers component
 
 export const metadata = {
   title: "Niarobi Liquor Store",
@@ -10,7 +10,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className="antialiased">
-        <CartProvider>{children}</CartProvider>
+        <Providers>{children}</Providers> {/* Use the new Providers component */}
       </body>
     </html>
   )
