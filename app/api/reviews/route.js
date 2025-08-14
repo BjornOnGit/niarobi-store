@@ -64,12 +64,10 @@ export async function GET(request) {
       return NextResponse.json({ error: "Product ID is required." }, { status: 400 })
     }
 
+    // First, fetch the reviews without the join
     const { data: reviews, error } = await supabaseAdmin
       .from("product_reviews")
-      .select(`
-        *,
-        users:user_id(email)
-      `)
+      .select("*")
       .eq("product_id", productId)
       .order("created_at", { ascending: false })
 
@@ -78,11 +76,83 @@ export async function GET(request) {
       return NextResponse.json({ error: "Failed to fetch reviews." }, { status: 500 })
     }
 
-    // Calculate average rating
-    const totalRatings = reviews.reduce((sum, review) => sum + review.rating, 0)
-    const averageRating = reviews.length > 0 ? (totalRatings / reviews.length).toFixed(1) : 0
+    // If there are reviews, fetch user emails separately using raw SQL
+    let reviewsWithUserEmails = reviews
+    if (reviews && reviews.length > 0) {
+      const userIds = [...new Set(reviews.map((review) => review.user_id))] // Get unique user IDs
 
-    return NextResponse.json({ reviews, averageRating, totalReviews: reviews.length }, { status: 200 })
+      try {
+        // Use raw SQL query to access auth.users table
+        const { data: users, error: usersError } = await supabaseAdmin.rpc('get_user_emails', {
+          user_ids: userIds
+        })
+
+        if (usersError) {
+          console.error("Error fetching user emails via RPC:", usersError)
+          // Try alternative approach with direct auth admin client
+          try {
+            const userEmailMap = {}
+            
+            // Fetch user emails one by one using the auth admin client
+            for (const userId of userIds) {
+              try {
+                const { data: userData, error: userError } = await supabaseAdmin.auth.admin.getUserById(userId)
+                if (!userError && userData.user) {
+                  userEmailMap[userId] = userData.user.email
+                }
+              } catch (individualUserError) {
+                console.error(`Error fetching user ${userId}:`, individualUserError)
+                userEmailMap[userId] = "Anonymous"
+              }
+            }
+
+            reviewsWithUserEmails = reviews.map((review) => ({
+              ...review,
+              users: { email: userEmailMap[review.user_id] || "Anonymous" },
+            }))
+          } catch (authAdminError) {
+            console.error("Error using auth admin client:", authAdminError)
+            // Final fallback - show all as anonymous
+            reviewsWithUserEmails = reviews.map((review) => ({
+              ...review,
+              users: { email: "Anonymous" },
+            }))
+          }
+        } else {
+          // Map user emails to reviews using RPC result
+          const userEmailMap = {}
+          users.forEach((user) => {
+            userEmailMap[user.id] = user.email
+          })
+
+          reviewsWithUserEmails = reviews.map((review) => ({
+            ...review,
+            users: { email: userEmailMap[review.user_id] || "Anonymous" },
+          }))
+        }
+      } catch (userFetchError) {
+        console.error("Error in user fetch operation:", userFetchError)
+        // Continue without user emails if this fails
+        reviewsWithUserEmails = reviews.map((review) => ({
+          ...review,
+          users: { email: "Anonymous" },
+        }))
+      }
+    }
+
+    // Calculate average rating
+    const totalRatings = reviewsWithUserEmails.reduce((sum, review) => sum + review.rating, 0)
+    const averageRating =
+      reviewsWithUserEmails.length > 0 ? (totalRatings / reviewsWithUserEmails.length).toFixed(1) : 0
+
+    return NextResponse.json(
+      {
+        reviews: reviewsWithUserEmails,
+        averageRating,
+        totalReviews: reviewsWithUserEmails.length,
+      },
+      { status: 200 },
+    )
   } catch (error) {
     console.error("Error in reviews API (GET):", error)
     return NextResponse.json({ error: "Internal server error." }, { status: 500 })

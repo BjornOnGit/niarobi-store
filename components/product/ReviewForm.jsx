@@ -1,7 +1,6 @@
 "use client"
 
 import Link from "next/link"
-
 import { useState } from "react"
 import { useUserSession } from "../../context/UserSessionContext"
 import LoadingSpinner from "../ui/LoadingSpinner"
@@ -38,16 +37,32 @@ export default function ReviewForm({ productId, onReviewSubmitted }) {
     setIsSubmitting(true)
 
     try {
-      // In the next step, we will replace this with an actual API call
-      // For now, simulate a submission
-      await new Promise((resolve) => setTimeout(resolve, 1000))
+      // Make actual API call to submit review
+      const response = await fetch("/api/reviews", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          productId: productId,
+          userId: user.id,
+          rating: rating,
+          reviewText: reviewText.trim() || null,
+        }),
+      })
 
-      // Simulate success
-      setMessage("Review submitted successfully! (Simulated)")
-      setMessageType("success")
-      setRating(0)
-      setReviewText("")
-      onReviewSubmitted && onReviewSubmitted() // Notify parent component
+      const data = await response.json()
+
+      if (response.ok) {
+        setMessage(data.message || "Review submitted successfully!")
+        setMessageType("success")
+        setRating(0)
+        setReviewText("")
+        onReviewSubmitted && onReviewSubmitted() // Notify parent component to refresh reviews
+      } else {
+        setMessage(data.error || "Failed to submit review. Please try again.")
+        setMessageType("error")
+      }
     } catch (error) {
       console.error("Error submitting review:", error)
       setMessage("Failed to submit review. Please try again.")
@@ -106,7 +121,7 @@ export default function ReviewForm({ productId, onReviewSubmitted }) {
         {/* Review Text */}
         <div>
           <label htmlFor="review-text" className="block text-sm font-medium text-gray-700 mb-2">
-            Your Review
+            Your Review (Optional)
           </label>
           <textarea
             id="review-text"

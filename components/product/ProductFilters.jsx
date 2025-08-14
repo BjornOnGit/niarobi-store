@@ -1,8 +1,7 @@
-
 "use client"
 
 import { useRouter, useSearchParams } from "next/navigation"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 
 const CATEGORIES = [
   { value: "", label: "All Categories" },
@@ -31,13 +30,23 @@ export default function ProductFilters() {
   const [category, setCategory] = useState(searchParams.get("category") || "")
   const [priceRange, setPriceRange] = useState(searchParams.get("price") || "")
   const [sortBy, setSortBy] = useState(searchParams.get("sort") || "newest")
+  const [searchQuery, setSearchQuery] = useState(searchParams.get("search") || "") // Add search state
 
-  const updateFilters = (newCategory, newPriceRange, newSortBy) => {
+  // Update local state when URL params change
+  useEffect(() => {
+    setCategory(searchParams.get("category") || "")
+    setPriceRange(searchParams.get("price") || "")
+    setSortBy(searchParams.get("sort") || "newest")
+    setSearchQuery(searchParams.get("search") || "")
+  }, [searchParams])
+
+  const updateFilters = (newCategory, newPriceRange, newSortBy, newSearchQuery) => {
     const params = new URLSearchParams()
 
     if (newCategory) params.set("category", newCategory)
     if (newPriceRange) params.set("price", newPriceRange)
     if (newSortBy && newSortBy !== "newest") params.set("sort", newSortBy)
+    if (newSearchQuery) params.set("search", newSearchQuery) // Add search to params
 
     const queryString = params.toString()
     const newUrl = queryString ? `/products?${queryString}` : "/products"
@@ -47,30 +56,87 @@ export default function ProductFilters() {
 
   const handleCategoryChange = (value) => {
     setCategory(value)
-    updateFilters(value, priceRange, sortBy)
+    updateFilters(value, priceRange, sortBy, searchQuery)
   }
 
   const handlePriceChange = (value) => {
     setPriceRange(value)
-    updateFilters(category, value, sortBy)
+    updateFilters(category, value, sortBy, searchQuery)
   }
 
   const handleSortChange = (value) => {
     setSortBy(value)
-    updateFilters(category, priceRange, value)
+    updateFilters(category, priceRange, value, searchQuery)
+  }
+
+  const handleSearchChange = (e) => {
+    const value = e.target.value
+    setSearchQuery(value)
+  }
+
+  const handleSearchSubmit = (e) => {
+    e.preventDefault()
+    updateFilters(category, priceRange, sortBy, searchQuery)
   }
 
   const clearFilters = () => {
     setCategory("")
     setPriceRange("")
     setSortBy("newest")
+    setSearchQuery("") // Clear search as well
     router.push("/products")
   }
 
-  const hasActiveFilters = category || priceRange || sortBy !== "newest"
+  const hasActiveFilters = category || priceRange || sortBy !== "newest" || searchQuery
 
   return (
     <div className="bg-white p-6 rounded-lg shadow-sm border mb-6">
+      {/* Search Bar for Mobile/Desktop */}
+      <div className="mb-6 md:hidden">
+        <form onSubmit={handleSearchSubmit}>
+          <div className="relative">
+            <input
+              type="text"
+              placeholder="Search products..."
+              value={searchQuery}
+              onChange={handleSearchChange}
+              className="w-full px-4 py-2 pl-10 pr-4 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            />
+            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+              <svg
+                className="h-4 w-4 text-gray-400"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                />
+              </svg>
+            </div>
+            <button
+              type="submit"
+              className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600"
+            >
+              <span className="sr-only">Search</span>
+              <svg
+                className="h-4 w-4"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5-5 5M6 12h12" />
+              </svg>
+            </button>
+          </div>
+        </form>
+      </div>
+
       <div className="flex flex-col lg:flex-row lg:items-center gap-4">
         {/* Category Filter */}
         <div className="flex-1">
@@ -126,6 +192,7 @@ export default function ProductFilters() {
             <option value="price-low">Price: Low to High</option>
             <option value="price-high">Price: High to Low</option>
             <option value="name">Name: A to Z</option>
+            <option value="relevance">Most Relevant</option>
           </select>
         </div>
 
@@ -136,7 +203,7 @@ export default function ProductFilters() {
               onClick={clearFilters}
               className="px-4 py-2 text-sm text-gray-600 hover:text-gray-800 border border-gray-300 rounded-md hover:bg-gray-50 transition-colors mt-6 lg:mt-0"
             >
-              Clear Filters
+              Clear All
             </button>
           </div>
         )}
@@ -157,6 +224,11 @@ export default function ProductFilters() {
                 {PRICE_RANGES.find((p) => p.value === priceRange)?.label}
               </span>
             )}
+            {searchQuery && (
+              <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+                Search: "{searchQuery}"
+              </span>
+            )}
             {sortBy !== "newest" && (
               <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-purple-100 text-purple-800">
                 Sort:{" "}
@@ -166,7 +238,9 @@ export default function ProductFilters() {
                     ? "Price High-Low"
                     : sortBy === "name"
                       ? "A-Z"
-                      : "Oldest First"}
+                      : sortBy === "relevance"
+                        ? "Most Relevant"
+                        : "Oldest First"}
               </span>
             )}
           </div>

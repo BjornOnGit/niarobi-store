@@ -2,6 +2,7 @@
 
 import Link from "next/link"
 import CartIcon from "../ui/CartIcon"
+import SearchBar from "../ui/SearchBar" // Import SearchBar
 import { useUserSession } from "../../context/UserSessionContext" // Import useUserSession
 import { useRouter } from "next/navigation"
 
@@ -48,7 +49,9 @@ export default function Navbar() {
             )}
           </div>
 
+          {/* Search Bar */}
           <div className="flex items-center space-x-4">
+            <SearchBar />
             <CartIcon />
           </div>
         </div>
