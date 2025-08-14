@@ -61,7 +61,7 @@ export default function AdminLayout({ children }) {
             <div className="flex justify-between items-center h-16">
               <div className="flex items-center">
                 <Link href="/admin" className="text-xl font-bold text-gray-900">
-                  Novadora Admin
+                  Niarobi Admin
                 </Link>
               </div>
               <div className="flex items-center space-x-4">
