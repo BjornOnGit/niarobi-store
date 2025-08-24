@@ -145,7 +145,7 @@ export default async function ProductsPage({ searchParams }) {
 export async function generateMetadata({ searchParams }) {
   if (searchParams.search) {
     return {
-      title: `Search: ${searchParams.search} - Novadora Liquor Store`,
+      title: `Search: ${searchParams.search} - Niarobi Liquor Store`,
       description: `Search results for "${searchParams.search}" - Premium liquor delivery in Lagos and Abuja`,
     }
   }
@@ -153,13 +153,13 @@ export async function generateMetadata({ searchParams }) {
   if (searchParams.category) {
     const categoryName = searchParams.category.charAt(0).toUpperCase() + searchParams.category.slice(1)
     return {
-      title: `${categoryName} Collection - Novadora Liquor Store`,
+      title: `${categoryName} Collection - Niarobi Liquor Store`,
       description: `Premium ${searchParams.category} collection - Luxury liquor delivery in Lagos and Abuja`,
     }
   }
 
   return {
-    title: "Premium Liquor Collection - Novadora Liquor Store",
+    title: "Premium Liquor Collection - Niarobi Liquor Store",
     description: "Browse our premium collection of wines, spirits, and champagne with fast delivery in Lagos and Abuja",
   }
 }

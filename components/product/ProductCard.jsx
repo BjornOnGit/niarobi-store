@@ -1,3 +1,5 @@
+"use client"
+
 import Image from "next/image"
 import Link from "next/link"
 
@@ -10,59 +12,74 @@ export default function ProductCard({ product }) {
     }).format(price)
   }
 
+  // Ensure we have a valid slug
+  const productSlug = product.slug || product.id
+
   return (
     <div className="group relative bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-500 hover:transform hover:scale-[1.02] border border-gray-100">
-      {/* Product Image */}
-      <div className="relative h-72 w-full overflow-hidden bg-gradient-to-br from-gray-50 to-gray-100">
-        <Image
-          src={product.image_url || "/placeholder.svg?height=400&width=300&query=premium liquor bottle"}
-          alt={product.name}
-          fill
-          className="object-cover group-hover:scale-110 transition-transform duration-700"
-          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-        />
+      {/* Product Image - Make entire image area clickable */}
+      <Link href={`/product/${productSlug}`} className="block">
+        <div className="relative h-72 w-full overflow-hidden bg-gradient-to-br from-gray-50 to-gray-100">
+          <Image
+            src={product.image_url || "/placeholder.svg?height=400&width=300&query=premium liquor bottle"}
+            alt={product.name}
+            fill
+            className="object-cover group-hover:scale-110 transition-transform duration-700"
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+          />
 
-        {/* Overlay Effects */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+          {/* Overlay Effects */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
 
-        {/* Stock Status */}
-        {!product.in_stock && (
-          <div className="absolute inset-0 bg-black/60 flex items-center justify-center backdrop-blur-sm">
-            <div className="bg-red-500 text-white px-4 py-2 rounded-full font-semibold text-sm">Out of Stock</div>
+          {/* Stock Status */}
+          {!product.in_stock && (
+            <div className="absolute inset-0 bg-black/60 flex items-center justify-center backdrop-blur-sm">
+              <div className="bg-red-500 text-white px-4 py-2 rounded-full font-semibold text-sm">Out of Stock</div>
+            </div>
+          )}
+
+          {/* Category Badge */}
+          <div className="absolute top-4 left-4">
+            <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-white/90 text-gray-800 backdrop-blur-sm capitalize">
+              {product.category}
+            </span>
           </div>
-        )}
 
-        {/* Category Badge */}
-        <div className="absolute top-4 left-4">
-          <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-white/90 text-gray-800 backdrop-blur-sm capitalize">
-            {product.category}
-          </span>
+          {/* Quick View Button */}
+          <div className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-2 group-hover:translate-y-0">
+            <button
+              onClick={(e) => {
+                e.preventDefault()
+                window.location.href = `/product/${productSlug}`
+              }}
+              className="w-10 h-10 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center hover:bg-white transition-colors duration-200 shadow-lg"
+            >
+              <svg className="w-5 h-5 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                />
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+                />
+              </svg>
+            </button>
+          </div>
         </div>
-
-        {/* Quick View Button */}
-        <div className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-2 group-hover:translate-y-0">
-          <Link
-            href={`/product/${product.slug}`}
-            className="w-10 h-10 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center hover:bg-white transition-colors duration-200 shadow-lg"
-          >
-            <svg className="w-5 h-5 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
-              />
-            </svg>
-          </Link>
-        </div>
-      </div>
+      </Link>
 
       {/* Product Details */}
       <div className="p-6">
         <div className="mb-3">
           <h3 className="text-lg font-bold text-gray-900 mb-2 line-clamp-2 group-hover:text-amber-600 transition-colors duration-200">
-            <Link href={`/product/${product.slug}`}>{product.name}</Link>
+            <Link href={`/product/${productSlug}`} className="hover:text-amber-600">
+              {product.name}
+            </Link>
           </h3>
 
           {product.description && (
@@ -92,7 +109,7 @@ export default function ProductCard({ product }) {
 
         {/* Action Button */}
         <Link
-          href={`/product/${product.slug}`}
+          href={`/product/${productSlug}`}
           className="w-full bg-gradient-to-r from-amber-500 to-orange-500 text-white px-6 py-3 rounded-xl font-semibold hover:from-amber-600 hover:to-orange-600 transition-all duration-300 transform hover:scale-[1.02] shadow-lg hover:shadow-xl text-center block group-hover:shadow-amber-500/25"
         >
           View Details
@@ -100,7 +117,7 @@ export default function ProductCard({ product }) {
       </div>
 
       {/* Shine Effect */}
-      <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+      <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none">
         <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent transform -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
       </div>
     </div>
