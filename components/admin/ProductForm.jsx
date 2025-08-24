@@ -113,8 +113,9 @@ export default function ProductForm({ product = null, isEdit = false }) {
             value={formData.name}
             onChange={handleChange}
             required
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900 bg-white"
             placeholder="e.g., Hennessy VS"
+            style={{ color: "#1f2937 !important", backgroundColor: "#ffffff !important" }}
           />
         </div>
 
@@ -129,7 +130,8 @@ export default function ProductForm({ product = null, isEdit = false }) {
             value={formData.category}
             onChange={handleChange}
             required
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900 bg-white"
+            style={{ color: "#1f2937 !important", backgroundColor: "#ffffff !important" }}
           >
             <option value="">Select Category</option>
             {CATEGORIES.map((cat) => (
@@ -154,8 +156,9 @@ export default function ProductForm({ product = null, isEdit = false }) {
             required
             min="0"
             step="0.01"
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900 bg-white"
             placeholder="e.g., 45000"
+            style={{ color: "#1f2937 !important", backgroundColor: "#ffffff !important" }}
           />
         </div>
 
@@ -170,8 +173,9 @@ export default function ProductForm({ product = null, isEdit = false }) {
             name="bottle_size"
             value={formData.bottle_size}
             onChange={handleChange}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900 bg-white"
             placeholder="e.g., 750ml"
+            style={{ color: "#1f2937 !important", backgroundColor: "#ffffff !important" }}
           />
         </div>
       </div>
@@ -187,8 +191,9 @@ export default function ProductForm({ product = null, isEdit = false }) {
           value={formData.description}
           onChange={handleChange}
           rows="4"
-          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900 bg-white"
           placeholder="Describe the product..."
+          style={{ color: "#1f2937 !important", backgroundColor: "#ffffff !important" }}
         />
       </div>
 
@@ -203,8 +208,9 @@ export default function ProductForm({ product = null, isEdit = false }) {
           name="image_url"
           value={formData.image_url}
           onChange={handleChange}
-          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900 bg-white"
           placeholder="https://example.com/image.jpg"
+          style={{ color: "#1f2937 !important", backgroundColor: "#ffffff !important" }}
         />
       </div>
 

@@ -15,10 +15,10 @@ export default function CartPage() {
   const [appliedPromo, setAppliedPromo] = useState(null)
   const [customerEmail, setCustomerEmail] = useState("")
   const [deliveryCity, setDeliveryCity] = useState("")
-  const [deliveryFee, setDeliveryFee] = useState(0) // State for dynamic delivery fee
+  const [deliveryFee, setDeliveryFee] = useState(0)
   const [isProcessingCheckout, setIsProcessingCheckout] = useState(false)
   const [checkoutError, setCheckoutError] = useState("")
-  const [availableCities, setAvailableCities] = useState([]) // New state for cities
+  const [availableCities, setAvailableCities] = useState([])
 
   const formatPrice = (price) => {
     return new Intl.NumberFormat("en-NG", {
@@ -98,14 +98,14 @@ export default function CartPage() {
           customerEmail,
           deliveryCity,
           promoCodeData: appliedPromo,
-          deliveryFee, // Pass the dynamically fetched delivery fee
+          deliveryFee,
         }),
       })
 
       const data = await response.json()
 
       if (response.ok && data.authorization_url) {
-        window.location.href = data.authorization_url // Redirect to Paystack
+        window.location.href = data.authorization_url
       } else {
         setCheckoutError(data.error || "Failed to initiate checkout. Please try again.")
       }
@@ -225,10 +225,11 @@ export default function CartPage() {
 
                           <div className="flex items-center justify-between mt-4">
                             {/* Quantity Controls */}
-                            <div className="flex items-center border border-gray-300 rounded-md">
+                            <div className="flex items-center border border-gray-300 rounded-md quantity-selector">
                               <button
                                 onClick={() => handleQuantityChange(item.id, item.quantity - 1)}
-                                className="px-3 py-2 text-gray-600 hover:text-gray-800 hover:bg-gray-50"
+                                className="px-3 py-2 text-gray-800 bg-white hover:text-gray-900 hover:bg-gray-50 border-r border-gray-300"
+                                style={{ color: "#374151 !important", backgroundColor: "#ffffff !important" }}
                               >
                                 -
                               </button>
@@ -240,12 +241,14 @@ export default function CartPage() {
                                 onChange={(e) =>
                                   handleQuantityChange(item.id, Math.max(1, Number.parseInt(e.target.value) || 1))
                                 }
-                                className="w-16 px-3 py-2 text-center border-0 focus:outline-none focus:ring-0"
+                                className="w-16 px-3 py-2 text-center border-0 focus:outline-none focus:ring-0 text-gray-900 bg-white"
+                                style={{ color: "#1f2937 !important", backgroundColor: "#ffffff !important" }}
                               />
                               <button
                                 onClick={() => handleQuantityChange(item.id, item.quantity + 1)}
-                                className="px-3 py-2 text-gray-600 hover:text-gray-800 hover:bg-gray-50"
+                                className="px-3 py-2 text-gray-800 bg-white hover:text-gray-900 hover:bg-gray-50 border-l border-gray-300"
                                 disabled={item.quantity >= 10}
+                                style={{ color: "#374151 !important", backgroundColor: "#ffffff !important" }}
                               >
                                 +
                               </button>
@@ -327,7 +330,8 @@ export default function CartPage() {
                         onChange={(e) => setCustomerEmail(e.target.value)}
                         placeholder="your.email@example.com"
                         required
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900 bg-white"
+                        style={{ color: "#1f2937 !important", backgroundColor: "#ffffff !important" }}
                       />
                     </div>
                     <div>
@@ -339,7 +343,8 @@ export default function CartPage() {
                         value={deliveryCity}
                         onChange={(e) => setDeliveryCity(e.target.value)}
                         required
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900 bg-white"
+                        style={{ color: "#1f2937 !important", backgroundColor: "#ffffff !important" }}
                       >
                         <option value="">Select City</option>
                         {availableCities.map((city) => (

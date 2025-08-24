@@ -12,7 +12,7 @@ export default function AuthPage() {
   const [isSigningUp, setIsSigningUp] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [message, setMessage] = useState("")
-  const [messageType, setMessageType] = useState("") // 'success' or 'error'
+  const [messageType, setMessageType] = useState("")
 
   const router = useRouter()
 
@@ -26,7 +26,7 @@ export default function AuthPage() {
       email,
       password,
       options: {
-        emailRedirectTo: `${location.origin}/auth/callback`, // For email confirmation flow
+        emailRedirectTo: `${location.origin}/auth/callback`,
       },
     })
 
@@ -59,7 +59,7 @@ export default function AuthPage() {
     } else {
       setMessage("Signed in successfully! Redirecting...")
       setMessageType("success")
-      router.push("/products") // Redirect to products page after successful sign-in
+      router.push("/products")
     }
     setIsLoading(false)
   }
@@ -95,11 +95,12 @@ export default function AuthPage() {
                   type="email"
                   autoComplete="email"
                   required
-                  className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
+                  className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 bg-white rounded-t-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
                   placeholder="Email address"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   disabled={isLoading}
+                  style={{ color: "#1f2937 !important", backgroundColor: "#ffffff !important" }}
                 />
               </div>
               <div>
@@ -112,11 +113,12 @@ export default function AuthPage() {
                   type="password"
                   autoComplete="current-password"
                   required
-                  className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
+                  className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 bg-white rounded-b-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
                   placeholder="Password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   disabled={isLoading}
+                  style={{ color: "#1f2937 !important", backgroundColor: "#ffffff !important" }}
                 />
               </div>
             </div>

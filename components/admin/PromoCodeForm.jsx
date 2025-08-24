@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import { useRouter } from "next/navigation"
-import LoadingSpinner from "../../components/ui/LoadingSpinner"
+import LoadingSpinner from "../ui/LoadingSpinner"
 
 export default function PromoCodeForm({ promoCode = null, isEdit = false }) {
   const router = useRouter()
@@ -133,9 +133,9 @@ export default function PromoCodeForm({ promoCode = null, isEdit = false }) {
               value={formData.code}
               onChange={handleChange}
               required
-              className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 uppercase"
+              className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 uppercase text-gray-900 bg-white"
               placeholder="e.g., SAVE20"
-              style={{ textTransform: "uppercase" }}
+              style={{ textTransform: "uppercase", color: "#1f2937 !important", backgroundColor: "#ffffff !important" }}
             />
             <button
               type="button"
@@ -158,7 +158,8 @@ export default function PromoCodeForm({ promoCode = null, isEdit = false }) {
             value={formData.discount_type}
             onChange={handleChange}
             required
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900 bg-white"
+            style={{ color: "#1f2937 !important", backgroundColor: "#ffffff !important" }}
           >
             <option value="percentage">Percentage (%)</option>
             <option value="fixed">Fixed Amount (₦)</option>
@@ -180,8 +181,9 @@ export default function PromoCodeForm({ promoCode = null, isEdit = false }) {
             min="0"
             max={formData.discount_type === "percentage" ? "100" : undefined}
             step={formData.discount_type === "percentage" ? "0.01" : "1"}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900 bg-white"
             placeholder={formData.discount_type === "percentage" ? "e.g., 20" : "e.g., 5000"}
+            style={{ color: "#1f2937 !important", backgroundColor: "#ffffff !important" }}
           />
         </div>
 
@@ -199,8 +201,9 @@ export default function PromoCodeForm({ promoCode = null, isEdit = false }) {
             required
             min="0"
             step="1"
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900 bg-white"
             placeholder="e.g., 10000"
+            style={{ color: "#1f2937 !important", backgroundColor: "#ffffff !important" }}
           />
         </div>
 
@@ -218,8 +221,9 @@ export default function PromoCodeForm({ promoCode = null, isEdit = false }) {
               onChange={handleChange}
               min="0"
               step="1"
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900 bg-white"
               placeholder="e.g., 50000"
+              style={{ color: "#1f2937 !important", backgroundColor: "#ffffff !important" }}
             />
           </div>
         )}
@@ -237,8 +241,9 @@ export default function PromoCodeForm({ promoCode = null, isEdit = false }) {
             onChange={handleChange}
             min="1"
             step="1"
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900 bg-white"
             placeholder="Leave empty for unlimited"
+            style={{ color: "#1f2937 !important", backgroundColor: "#ffffff !important" }}
           />
         </div>
 
@@ -253,7 +258,8 @@ export default function PromoCodeForm({ promoCode = null, isEdit = false }) {
             name="valid_from"
             value={formData.valid_from}
             onChange={handleChange}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900 bg-white"
+            style={{ color: "#1f2937 !important", backgroundColor: "#ffffff !important" }}
           />
         </div>
 
@@ -268,7 +274,8 @@ export default function PromoCodeForm({ promoCode = null, isEdit = false }) {
             name="valid_until"
             value={formData.valid_until}
             onChange={handleChange}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900 bg-white"
+            style={{ color: "#1f2937 !important", backgroundColor: "#ffffff !important" }}
           />
         </div>
       </div>
@@ -284,8 +291,9 @@ export default function PromoCodeForm({ promoCode = null, isEdit = false }) {
           value={formData.description}
           onChange={handleChange}
           rows="3"
-          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900 bg-white"
           placeholder="Optional description for internal use..."
+          style={{ color: "#1f2937 !important", backgroundColor: "#ffffff !important" }}
         />
       </div>
 
